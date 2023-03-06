@@ -1,0 +1,8 @@
+- Move these todo items to GitLab issues ;)
+- In schema, add patterns, minLength, maxLength etc to properties e.g. ```"pattern": "^[A-Za-z0-9_]{40,259}$"```. These have been removed from the example code so that is is not assumed they are correct. 
+- In schema, review "type" for all properties. Currently these are all "string".
+- Schema: Use array/list of available regions, rather than unrestricted text
+- Schema: Review ```required``` properties. What are sane defaults or can be extrapolated. E.g can we use the region where CFN stack is being run from as the default if not otherwise specified? Can we set multi host as the default deployment type? Can extrapolate "ConnectedAWSVPC" from "ConnectedAWSSubnet" and then remove "ConnectedAWSVPC" from the required properties?
+- General: Should we mandate that the CFN stack needs to run in the Connected AWS Account, or can it run from any account? I think the latter, but using the Connected AWS Account would allow us to automatically pick up the account ID, and enumerate the VPCs and subnets as a list of options.
+- Schema: I have overridden the default replacement strategy so as that it is set tp delete_then_create. As a significant amount of configuration is still required post SDDC creation, it is unlikely that users of this resource would be expecting a seamless switch over between the existing SDDC and the new one being replaced. I'm interested in other opinions here.
+- Schema: Specifying "timeoutinMinutes" for create handle results in generation schema error.

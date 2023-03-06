@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Parameters:
+  AccessToken:
+    Type: String
+    NoEcho: true
+  Name:
+    Type: String
+  #ConnectedAWSAccountID:
+  #  Type: String
+  #ConnectedAWSVPC:
+  #  Type: String
+  #ConnectedAWSSubnet:
+  #  Type: String
+  ManagementSubnet:
+    Type: String
+Resources:
+  SDDC:
+    Type: VMware::CloudOnAWS::SDDC
+    Properties:
+      Name: 
+        Ref: Name
+      ManagementSubnet:
+        Ref: ManagementSubnet
+      AccessToken:
+        Ref: AccessToken
+    
