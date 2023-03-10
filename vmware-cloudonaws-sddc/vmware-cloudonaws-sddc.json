@@ -83,6 +83,10 @@
       "description": "Provisioning Task ID",
       "type": "string"
     },    
+    "DeleteTaskID": {
+      "description": "Delete Task ID",
+      "type": "string"
+    },        
     "vCenterURL": {
       "description": "vCenter URL",
       "type": "string"
@@ -108,6 +112,7 @@
   "readOnlyProperties": [
     "/properties/ID",
     "/properties/TaskID",
+    "/properties/DeleteTaskID",    
     "/properties/vCenterURL",
     "/properties/NSXPublicURL"
   ],

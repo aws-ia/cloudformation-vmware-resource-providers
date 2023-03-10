@@ -249,6 +249,10 @@ SDDC ID
 
 Provisioning Task ID
 
+#### DeleteTaskID
+
+Delete Task ID
+
 #### vCenterURL
 
 vCenter URL

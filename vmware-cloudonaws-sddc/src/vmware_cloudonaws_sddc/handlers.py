@@ -111,6 +111,8 @@ def update_handler(
         resourceModel=model,
     )
     # TODO: put code here
+
+    LOG.debug(f"update_handler(): Model: {model}")
     
     return ProgressEvent(
             status=OperationStatus.SUCCESS,
@@ -132,6 +134,18 @@ def delete_handler(
     
     LOG.debug("delete_handler(), trying to print model:")
     LOG.debug(model)
+
+    if _is_callback(
+        callback_context,
+    ):
+        return _callback_helper(
+            session,
+            request,
+            callback_context,
+            model,
+            is_delete_handler=True
+        )
+
     authentication = VMCAuth(model.CSPProdURL)
     authentication.getAccessToken(model.AccessToken)
     if authentication.access_token is None:
@@ -142,21 +156,23 @@ def delete_handler(
             print(f'SDDC ID to Delete: [{model.ID}]')
             json_response = delete_sddc_json(model.ProdURL, authentication,model.OrgID,model.ID, False)
             if json_response:
-                print(json_response)
+                id = json_response['id']
+                LOG.debug(f"Delete task ID: {id}")
+                model.DeleteTaskID = id
+
+                return _progress_event_callback(model=model,)
+
+            else:
+                LOG.debug('No id found in response from delete_sddc_json()')
+                LOG.debug(f"json: {json_response}")
+                return ProgressEvent.failed(HandlerErrorCode.NotFound, "No id found in response from delete_sddc_json()", None)
+
         else:
             LOG.debug('SDDC ID to Delete: [NOT FOUND] - returning FAILED status')
-            return ProgressEvent(
-                status=OperationStatus.FAILED,
-            )
+            return ProgressEvent.failed(HandlerErrorCode.NotFound, "SDDC ID was not found", None)
     else:
         LOG.debug('delete_handler() - model is None - returning FAILED status ')
-        return ProgressEvent(
-                status=OperationStatus.FAILED,
-            )
-    
-    return ProgressEvent(
-            status=OperationStatus.SUCCESS,
-            )
+        return ProgressEvent.failed(HandlerErrorCode.NotFound, "model is None", None)
 
 
 @resource.handler(Action.READ)
@@ -220,14 +236,42 @@ def _is_callback(
         return False
     
 def _progress_event_success(
-    model: Optional[ResourceModel] = None
+    model: Optional[ResourceModel] = None,
+    models: Any = None,    
+    is_delete_handler: bool = False,
+    is_list_handler: bool = False
 ) -> ProgressEvent:
     LOG.debug("_progress_event_success()")
     LOG.debug(model)
 
-    return ProgressEvent(
-        status=OperationStatus.SUCCESS,
-        resourceModel=model,
+    if (
+        not model
+        and not models
+        and not is_delete_handler
+        and not is_list_handler
+    ):
+        raise ValueError(
+            "Model, or models, or is_delete_handler, or is_list_handler unset",
+        )
+    
+    elif is_delete_handler and is_list_handler:
+        raise ValueError(
+            "Specify either is_delete_handler or is_list_handler, not both",
+        )
+    
+    elif is_delete_handler:
+        return ProgressEvent(
+            status=OperationStatus.SUCCESS,
+        )
+    elif is_list_handler:
+        return ProgressEvent(
+            status=OperationStatus.SUCCESS,
+            resourceModels=models,
+        )    
+    else:   
+        return ProgressEvent(
+            status=OperationStatus.SUCCESS,
+            resourceModel=model,
     )
 
 def _progress_event_failed(
@@ -237,7 +281,7 @@ def _progress_event_failed(
 ) -> ProgressEvent:
     LOG.debug("_progress_event_failed()")
 
-    return ProgressEvent.failed("400", "SDDC deployment failed")
+    return ProgressEvent.failed(HandlerErrorCode.InternalFailure, "SDDC deployment failed")
 
 def _callback_helper(
     session: Optional[SessionProxy],
@@ -251,16 +295,38 @@ def _callback_helper(
 
     authentication = VMCAuth(model.CSPProdURL)
     authentication.getAccessToken(model.AccessToken)
-    task_complete = check_task_status_v2(model.ProdURL,authentication,model.OrgID,model.ID,model.TaskID)
-    if task_complete == "READY":
-        LOG.debug("About to return _progress_event_success")
-        LOG.debug(model)
-        return _progress_event_success(
-            model=model,
+    if is_delete_handler:
+        LOG.debug(f"delete_handler: OrgID: {model.OrgID}, DeleteTaskID: {model.DeleteTaskID}")
+        json_response = watch_sddc_task_json(model.ProdURL, authentication, model.OrgID, model.DeleteTaskID)
+        if json_response:
+            task_complete = json_response["status"]
+            LOG.debug(f"Delete task status: {task_complete}")
+            if task_complete == "FINISHED":
+                LOG.debug("About to return _progress_event_success for DELETE")
+                LOG.debug(model)
+                return _progress_event_success(
+                    is_delete_handler=True
+                )
+
+            if task_complete == "FAILED" or task_complete == "CANCELED":
+                return _progress_event_failed
+
+        return _progress_event_callback(
+            model=model
         )
-    if task_complete == "FAILED":
-        return _progress_event_failed
+
+    else:
+        task_complete = check_task_status_v2(model.ProdURL,authentication,model.OrgID,model.ID,model.TaskID)
+        if task_complete == "READY":
+            LOG.debug("About to return _progress_event_success ")
+            LOG.debug(model)
+            return _progress_event_success(
+                model=model,
+            )
+        
+        if task_complete == "FAILED":
+            return _progress_event_failed
     
-    return _progress_event_callback(
-        model=model
-    )
+        return _progress_event_callback(
+            model=model
+        )

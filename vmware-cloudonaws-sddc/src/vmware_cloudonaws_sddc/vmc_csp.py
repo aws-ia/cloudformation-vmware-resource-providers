@@ -352,8 +352,14 @@ def delete_sddc_json(strProdURL, authentication: VMCAuth, orgID, sddcID,force):
 def watch_sddc_task_json(strProdURL, authentication: VMCAuth, orgID, taskid):
     myHeader = {'csp-auth-token': authentication.access_token}
     myURL = f"{strProdURL}/vmc/api/orgs/{orgID}/tasks/{taskid}"
-    response = requests.get(myURL, headers=myHeader) 
-    json_response = response.json()
+    response = requests.get(myURL, headers=myHeader)
+    print(f"URL: {myURL}, HEADER: {myHeader}, WATCH response: {response.status_code}")
+    try:
+        json_response = response.json()
+    except Exception as e:
+        print(F"JSON error: {e}")
+        return None
+
     if response.status_code == 200:
         # do the right thing
         return json_response

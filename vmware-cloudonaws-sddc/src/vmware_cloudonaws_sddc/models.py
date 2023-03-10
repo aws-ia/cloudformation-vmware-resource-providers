@@ -60,6 +60,7 @@ class ResourceModel(BaseModel):
     ProdURL: Optional[str]
     CSPProdURL: Optional[str]
     TaskID: Optional[str]
+    DeleteTaskID: Optional[str]
     vCenterURL: Optional[str]
     NSXPublicURL: Optional[str]
 
@@ -92,6 +93,7 @@ class ResourceModel(BaseModel):
             ProdURL=json_data.get("ProdURL"),
             CSPProdURL=json_data.get("CSPProdURL"),
             TaskID=json_data.get("TaskID"),
+            DeleteTaskID=json_data.get("DeleteTaskID"),
             vCenterURL=json_data.get("vCenterURL"),
             NSXPublicURL=json_data.get("NSXPublicURL"),
         )
