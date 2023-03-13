@@ -43,7 +43,7 @@
       "description": "VPC ID which will be connected to the SDDC",
       "type": "string"
     },
-    "ConnectedAWSSubnet": {
+    "ConnectedAWSSubnetID": {
       "description": "Subnet ID which will be connected to the SDDC",
       "type": "string"
     },
@@ -62,15 +62,7 @@
     "OrgID": {
       "description": "Organization ID",
       "type": "string"
-    },
-    "AWSAccountID": {
-      "description": "Linked AWS account ID - a GUID",
-      "type": "string"
-    },
-    "AWSSubnetID": {
-      "description": "Linked subnet for the Connected VPC",
-      "type": "string"
-    },     
+    },  
     "ProdURL": {
       "description": "Production URL for VMware Cloud on AWS i.e. https://vmc.vmware.com",
       "type": "string"
@@ -120,16 +112,13 @@
     "/properties/Region",
     "/properties/HostType", 
     "/properties/ConnectedAWSAccountID",
-    "/properties/ConnectedAWSVPC",
-    "/properties/ConnectedAWSSubnet",
+    "/properties/ConnectedAWSSubnetID",
     "/properties/ManagementSubnet",
     "/properties/VXLANSubnet",
     "/properties/OrgID",
     "/properties/Provider",
     "/properties/ProdURL",
-    "/properties/CSPProdURL",
-    "/properties/AWSAccountID",
-    "/properties/AWSSubnetID"    
+    "/properties/CSPProdURL"
   ],
   "primaryIdentifier": [
     "/properties/ID"

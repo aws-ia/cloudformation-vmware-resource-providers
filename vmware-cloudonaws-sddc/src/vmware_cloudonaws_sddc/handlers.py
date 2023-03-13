@@ -5,7 +5,16 @@ import requests;
 from datetime import datetime, timezone;
 import time;
 import sys
-from typing import Any, MutableMapping, Optional
+import traceback
+from typing import (
+    Any,
+    Dict,
+    List,
+    Mapping,
+    MutableMapping,
+    Optional,
+    Sequence,
+)
 from cloudformation_cli_python_lib import (
     Action,
     HandlerErrorCode,
@@ -20,6 +29,7 @@ from cloudformation_cli_python_lib import (
 from .models import ResourceHandlerRequest, ResourceModel
 from .vmc_auth import VMCAuth
 from .vmc_csp import *
+from .vmc_vmc import *
 #from .vmc.vmc_auth import VMCAuth
 #from .vmc.vmc_csp import *
 
@@ -74,7 +84,7 @@ def create_handler(
             LOG.debug(f"VMCAuth failed. Model: {model}")
             return ProgressEvent.failed(HandlerErrorCode.InvalidCredentials, "Authentication to VMC was unsuccessful, unable to continue.", None)
         validate_only = False
-        json_response = create_sddc_json_v2(authentication, model.ProdURL,model.OrgID, model.Name, model.Region, model.NumHosts, model.HostType, model.ManagementSubnet, validate_only,model.VXLANSubnet,model.Provider,model.AWSAccountID,model.AWSSubnetID)
+        json_response = create_sddc_json_v2(authentication, model.ProdURL,model.OrgID, model.Name, model.Region, model.NumHosts, model.HostType, model.ManagementSubnet, validate_only,model.VXLANSubnet,model.Provider,model.ConnectedAWSAccountID,model.ConnectedAWSSubnetID)
         print(json.dumps(json_response, indent=4))
         if json_response is not None:
             sddcId = json_response['resource_id']
@@ -199,12 +209,84 @@ def list_handler(
     request: ResourceHandlerRequest,
     callback_context: MutableMapping[str, Any],
 ) -> ProgressEvent:
-    # TODO: put code here
-    return ProgressEvent(
-        status=OperationStatus.SUCCESS,
-        resourceModels=[],
+    
+    progress: ProgressEvent = ProgressEvent(
+        status=OperationStatus.IN_PROGRESS,
+        resourceModel=None,
     )
 
+    LOG.debug(f"list_handler progress status: {progress.status}")
+    
+    try:
+        resource_model_list = []
+        model = request.desiredResourceState
+        LOG.debug(f"model: {model}")
+        resource_model_list = _get_resource_model_list(
+            model
+        )
+        LOG.debug(f"model list: {resource_model_list}")
+
+    except Exception as e:
+        return _progress_event_failed(
+            handler_error_code=HandlerErrorCode.InternalFailure,
+            error_message=str(e),
+            traceback_content=traceback.format_exc(),
+        )     
+
+    return _progress_event_success(
+        models=resource_model_list,
+        is_list_handler=True,
+    )
+
+def _get_resource_model_list(
+    model: ResourceModel,
+) -> List[ResourceModel]:
+    LOG.debug("_get_resource_model_list()")
+    resource_model_list = []
+
+    authentication = VMCAuth(model.CSPProdURL)
+    authentication.getAccessToken(model.AccessToken)
+    LOG.debug(f"_get_resource_model_list token: {authentication.access_token}")
+    LOG.debug(f"_get_resource_model_list model: {model}")
+    sddc_list = get_sddcs_json(model.ProdURL,model.OrgID,authentication.access_token)
+
+    LOG.debug(f"sddc_list size: {len(sddc_list)}")
+    for sddc in sddc_list:
+        LOG.debug(f"SDDC Name: {sddc['name']}, SDDC ID: {sddc['id']}")
+        try:
+
+            resource_model_list_item = ResourceModel(
+                AccessToken =  model.AccessToken,
+                ID = sddc["id"],
+                Name = sddc["name"],
+                OrgID = sddc["org_id"],
+                DeploymentType = None,
+                ManagementSubnet = sddc["resource_config"]["vpc_info"]["vpc_cidr"],
+                VXLANSubnet = None,
+                Region = sddc["resource_config"]["region"],
+                HostType = None,
+                NumHosts = None,
+                Provider = sddc["provider"],
+                ConnectedAWSAccountID = None,
+                ConnectedAWSSubnetID = None,
+                ConnectedAWSVPC = None,
+                ProdURL = model.ProdURL,
+                CSPProdURL = model.CSPProdURL,
+                TaskID = None,
+                DeleteTaskID = None,
+                vCenterURL = sddc["resource_config"]["vc_url"],
+                NSXPublicURL = sddc["resource_config"]["nsx_reverse_proxy_url"]
+            )
+        except Exception as e:
+            
+            LOG.debug(f"Cannot create ResourceModel object: Exception: {e}")
+            return ProgressEvent.failed(HandlerErrorCode.InternalFailure, e, None)
+
+
+        resource_model_list.append(resource_model_list_item)
+    
+    LOG.debug(f"resource model list: {resource_model_list}")
+    return resource_model_list
 
 def _progress_event_callback(
     model: Optional[ResourceModel],

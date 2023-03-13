@@ -50,13 +50,11 @@ class ResourceModel(BaseModel):
     Provider: Optional[str]
     ConnectedAWSAccountID: Optional[str]
     ConnectedAWSVPC: Optional[str]
-    ConnectedAWSSubnet: Optional[str]
+    ConnectedAWSSubnetID: Optional[str]
     ManagementSubnet: Optional[str]
     VXLANSubnet: Optional[str]
     ID: Optional[str]
     OrgID: Optional[str]
-    AWSAccountID: Optional[str]
-    AWSSubnetID: Optional[str]
     ProdURL: Optional[str]
     CSPProdURL: Optional[str]
     TaskID: Optional[str]
@@ -83,13 +81,11 @@ class ResourceModel(BaseModel):
             Provider=json_data.get("Provider"),
             ConnectedAWSAccountID=json_data.get("ConnectedAWSAccountID"),
             ConnectedAWSVPC=json_data.get("ConnectedAWSVPC"),
-            ConnectedAWSSubnet=json_data.get("ConnectedAWSSubnet"),
+            ConnectedAWSSubnetID=json_data.get("ConnectedAWSSubnetID"),
             ManagementSubnet=json_data.get("ManagementSubnet"),
             VXLANSubnet=json_data.get("VXLANSubnet"),
             ID=json_data.get("ID"),
             OrgID=json_data.get("OrgID"),
-            AWSAccountID=json_data.get("AWSAccountID"),
-            AWSSubnetID=json_data.get("AWSSubnetID"),
             ProdURL=json_data.get("ProdURL"),
             CSPProdURL=json_data.get("CSPProdURL"),
             TaskID=json_data.get("TaskID"),

@@ -21,12 +21,10 @@ To declare this entity in your AWS CloudFormation template, use the following sy
         "<a href="#provider" title="Provider">Provider</a>" : <i>String</i>,
         "<a href="#connectedawsaccountid" title="ConnectedAWSAccountID">ConnectedAWSAccountID</a>" : <i>String</i>,
         "<a href="#connectedawsvpc" title="ConnectedAWSVPC">ConnectedAWSVPC</a>" : <i>String</i>,
-        "<a href="#connectedawssubnet" title="ConnectedAWSSubnet">ConnectedAWSSubnet</a>" : <i>String</i>,
+        "<a href="#connectedawssubnetid" title="ConnectedAWSSubnetID">ConnectedAWSSubnetID</a>" : <i>String</i>,
         "<a href="#managementsubnet" title="ManagementSubnet">ManagementSubnet</a>" : <i>String</i>,
         "<a href="#vxlansubnet" title="VXLANSubnet">VXLANSubnet</a>" : <i>String</i>,
         "<a href="#orgid" title="OrgID">OrgID</a>" : <i>String</i>,
-        "<a href="#awsaccountid" title="AWSAccountID">AWSAccountID</a>" : <i>String</i>,
-        "<a href="#awssubnetid" title="AWSSubnetID">AWSSubnetID</a>" : <i>String</i>,
         "<a href="#produrl" title="ProdURL">ProdURL</a>" : <i>String</i>,
         "<a href="#cspprodurl" title="CSPProdURL">CSPProdURL</a>" : <i>String</i>,
     }
@@ -47,12 +45,10 @@ Properties:
     <a href="#provider" title="Provider">Provider</a>: <i>String</i>
     <a href="#connectedawsaccountid" title="ConnectedAWSAccountID">ConnectedAWSAccountID</a>: <i>String</i>
     <a href="#connectedawsvpc" title="ConnectedAWSVPC">ConnectedAWSVPC</a>: <i>String</i>
-    <a href="#connectedawssubnet" title="ConnectedAWSSubnet">ConnectedAWSSubnet</a>: <i>String</i>
+    <a href="#connectedawssubnetid" title="ConnectedAWSSubnetID">ConnectedAWSSubnetID</a>: <i>String</i>
     <a href="#managementsubnet" title="ManagementSubnet">ManagementSubnet</a>: <i>String</i>
     <a href="#vxlansubnet" title="VXLANSubnet">VXLANSubnet</a>: <i>String</i>
     <a href="#orgid" title="OrgID">OrgID</a>: <i>String</i>
-    <a href="#awsaccountid" title="AWSAccountID">AWSAccountID</a>: <i>String</i>
-    <a href="#awssubnetid" title="AWSSubnetID">AWSSubnetID</a>: <i>String</i>
     <a href="#produrl" title="ProdURL">ProdURL</a>: <i>String</i>
     <a href="#cspprodurl" title="CSPProdURL">CSPProdURL</a>: <i>String</i>
 </pre>
@@ -147,9 +143,9 @@ _Required_: No
 
 _Type_: String
 
-_Update requires_: [Replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement)
+_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
-#### ConnectedAWSSubnet
+#### ConnectedAWSSubnetID
 
 Subnet ID which will be connected to the SDDC
 
@@ -184,26 +180,6 @@ _Update requires_: [Replacement](https://docs.aws.amazon.com/AWSCloudFormation/l
 Organization ID
 
 _Required_: Yes
-
-_Type_: String
-
-_Update requires_: [Replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement)
-
-#### AWSAccountID
-
-Linked AWS account ID - a GUID
-
-_Required_: No
-
-_Type_: String
-
-_Update requires_: [Replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement)
-
-#### AWSSubnetID
-
-Linked subnet for the Connected VPC
-
-_Required_: No
 
 _Type_: String
 

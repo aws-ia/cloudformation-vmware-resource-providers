@@ -10,6 +10,6 @@
     "Provider": "AWS",
     "ProdURL": "https://vmc.vmware.com",
     "CSPProdURL": "https://console.cloud.vmware.com",
-    "AWSAccountID": "a134c59b-42e7-25ce-ebc4-425449c2ea2a",
-    "AWSSubnetID": "subnet-01ab23c4de56f78e"
+    "ConnectedAWSAccountID": "a134c59b-42e7-25ce-ebc4-425449c2ea2a",
+    "ConnectedAWSSubnetID": "subnet-01ab23c4de56f78e"
 }
