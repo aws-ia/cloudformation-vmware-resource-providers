@@ -192,13 +192,45 @@ def read_handler(
     callback_context: MutableMapping[str, Any],
 ) -> ProgressEvent:
     model = request.desiredResourceState
-
-    LOG.debug("read_handler(), attempting to print model:")
-    print(model)
-
-    return ProgressEvent(
-        status=OperationStatus.SUCCESS,
+    progress: ProgressEvent = ProgressEvent(
+        status=OperationStatus.IN_PROGRESS,
         resourceModel=model,
+    )
+
+    LOG.debug(f"read_handler(), attempting to print model: {model}")
+
+    LOG.debug(f"Progress status: {progress.status}")
+
+    try:
+        if model and model.ID:
+            authentication = VMCAuth(model.CSPProdURL)
+            authentication.getAccessToken(model.AccessToken)
+            LOG.debug("About to invoke get_sddc_info_json()")
+            sddc = get_sddc_info_json(model.ProdURL,model.OrgID,authentication.access_token,model.ID)
+            if sddc is None:
+                return _progress_event_failed(
+                    handler_error_code=HandlerErrorCode.NotFound,
+                    error_message="read_handler: Could not retrieve SDDC"
+                )                
+            else:
+                model.Name = sddc["name"]
+
+        else:
+            return _progress_event_failed(
+                handler_error_code=HandlerErrorCode.NotFound,
+                error_message="read_handler: no model ID was found"
+        )
+
+    except Exception as e:
+        LOG.debug(f"Exception {e}")
+        return _progress_event_failed(
+            handler_error_code=HandlerErrorCode.NotFound,
+            error_message=str(e),
+            traceback_content=traceback.format_exc(),
+        )
+
+    return _progress_event_success(
+        model=model,
     )
 
 

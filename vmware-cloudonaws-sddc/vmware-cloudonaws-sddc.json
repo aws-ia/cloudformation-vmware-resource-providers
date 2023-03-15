@@ -113,12 +113,7 @@
     "/properties/HostType", 
     "/properties/ConnectedAWSAccountID",
     "/properties/ConnectedAWSSubnetID",
-    "/properties/ManagementSubnet",
-    "/properties/VXLANSubnet",
-    "/properties/OrgID",
-    "/properties/Provider",
-    "/properties/ProdURL",
-    "/properties/CSPProdURL"
+    "/properties/ManagementSubnet"
   ],
   "primaryIdentifier": [
     "/properties/ID"

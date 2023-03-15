@@ -55,3 +55,20 @@ def get_sddcs_json(strProdURL, orgID, sessiontoken):
         return json_response
     else:
         vmc_error_handling(response)
+
+def get_sddc_info_json (strProdURL, orgID, sessiontoken, sddcID):
+    """Returns SDDC info in JSON format. Returns None if error"""
+    myHeader = {'csp-auth-token': sessiontoken}
+    myURL = f"{strProdURL}/vmc/api/orgs/{orgID}/sddcs/{sddcID}"
+    print(myURL)
+    response = requests.get(myURL, headers=myHeader)
+    print(response.status_code)
+    json_response = response.json()
+    if response.status_code == 200:
+        return json_response
+    else:
+        print("There was an error. Check the syntax.")
+        print(f'API call failed with status code {response.status_code}. URL: {myURL}.')
+        if 'error_messages' in json_response:
+            print(json_response['error_messages'])
+        return None        
