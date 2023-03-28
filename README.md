@@ -20,7 +20,7 @@ To get started:
 
 1. Use the search bar to filter by the "VMware" prefix.
 
-    Note: All official VMware Cloud on AWS resources begin with `VMware::CloudOnAWS` and specify that they are `Published by AWS`.
+    Note: All official VMware Cloud on AWS resources begin with `VMware::CloudOnAWS` and specify that they are `Published by AWS Community`.
 
 1. Select the desired resource name to view more information about its schema, and click **Activate**.
 
@@ -29,21 +29,8 @@ To get started:
     * Extension name
     * Execution role ARN
     * Automatic updates for minor version releases
-    * Configuration
 
-1. In your terminal, specify the configuration data for the registered VMware Cloud on AWS CloudFormation resource type, in the given account and region by using the **SetTypeConfiguration** operation:
-
-    For example:
-
-    ```Bash
-    $ aws cloudformation set-type-configuration \
-    --region us-west-2 --type RESOURCE \
-    --type-name VMware::CloudOnAWS::SDDC \
-    --configuration-alias default \
-    --configuration '{"VMwareCloudAccess": {"AccessToken": "{{resolve:ssm-secure:/cfn/vmwarecloud/accesstoken:1}}"}}'
-    ```
-
-1. After you have your resource configured, [create your AWS stack][7] that includes any of the activated VMware Cloud resources.
+1. After activating the extension, you can now [create your AWS stack][7] that includes any of the activated VMware Cloud resources.
 
 For more information about available commands and workflows, see the official [AWS documentation][8].
 
