@@ -1,0 +1,148 @@
+{
+  "typeName": "VMware::CloudOnAWS::SDDC",
+  "description": "Manage a VMware Cloud on AWS SDDC",
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "replacementStrategy": "delete_then_create",
+  "tagging": {
+    "taggable": false
+  },
+  "properties": {
+    "AccessToken": {
+      "description": "VMware CSP Access Token",
+      "type": "string"
+    },
+    "Name": {
+      "description": "Name of the SDDC",
+      "type": "string"
+    },
+    "Region": {
+      "description": "AWS Region where the SDDC will be deployed",
+      "type": "string"
+    },
+    "DeploymentType": {
+      "description": "SDDC Deployment Type - Single, multi or stretched",
+      "type": "string"
+    },
+    "HostType": {
+      "description": "i3.metal, i3en.metal, i4i.metal",
+      "type": "string"
+    },
+    "NumHosts": {
+      "description": "Number of hosts to deploy",
+      "type": "integer"
+    },    
+    "Provider": {
+      "description": "AWS,ZEROCLOUD",
+      "type": "string"
+    },    
+    "ConnectedAWSAccountID": {
+      "description": "AWS Account ID which will be connected to the SDDC",
+      "type": "string"
+    },
+    "ConnectedAWSVPC": {
+      "description": "VPC ID which will be connected to the SDDC",
+      "type": "string"
+    },
+    "ConnectedAWSSubnetID": {
+      "description": "Subnet ID which will be connected to the SDDC",
+      "type": "string"
+    },
+    "ManagementSubnet": {
+      "description": "CIDR Block which will be used for SDDC Management",
+      "type": "string"
+    },
+    "VXLANSubnet": {
+      "description": "CIDR block assigned to the default segment",
+      "type": "string"
+    },    
+    "ID": {
+      "description": "SDDC ID",
+      "type": "string"
+    },
+    "OrgID": {
+      "description": "Organization ID",
+      "type": "string"
+    },  
+    "ProdURL": {
+      "description": "Production URL for VMware Cloud on AWS i.e. https://vmc.vmware.com",
+      "type": "string"
+    },
+    "CSPProdURL": {
+      "description": "Production URL for the VMware Cloud Console i.e. https://console.cloud.vmware.com",
+      "type": "string"
+    },
+    "TaskID": {
+      "description": "Provisioning Task ID",
+      "type": "string"
+    },    
+    "DeleteTaskID": {
+      "description": "Delete Task ID",
+      "type": "string"
+    },        
+    "vCenterURL": {
+      "description": "vCenter URL",
+      "type": "string"
+    },
+    "NSXPublicURL": {
+      "description": "NSX Public URL",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "AccessToken",
+    "Name",
+    "ManagementSubnet",
+    "OrgID",
+    "Region",
+    "HostType",
+    "NumHosts",
+    "Provider",
+    "ProdURL",
+    "CSPProdURL"
+  ],
+  "readOnlyProperties": [
+    "/properties/ID",
+    "/properties/TaskID",
+    "/properties/DeleteTaskID",    
+    "/properties/vCenterURL",
+    "/properties/NSXPublicURL"
+  ],
+  "createOnlyProperties": [
+    "/properties/Region",
+    "/properties/HostType", 
+    "/properties/ConnectedAWSAccountID",
+    "/properties/ConnectedAWSSubnetID",
+    "/properties/ManagementSubnet"
+  ],
+  "primaryIdentifier": [
+    "/properties/ID"
+  ],
+  "handlers": {
+    "create": {
+      "permissions": [
+        "VMware:CreateSDDC"
+      ]
+    },
+    "read": {
+      "permissions": [
+        "VMware:DescribeSDDC"
+      ]
+    },
+    "update": {
+      "permissions": [
+        "VMware:UpdateSDDC"
+      ]
+    },
+    "delete": {
+      "permissions": [
+        "VMware:DeleteSDDC"
+      ]
+    },
+    "list": {
+      "permissions": [
+        "VMware:ListSDDCs"
+      ]
+    }
+  }
+}

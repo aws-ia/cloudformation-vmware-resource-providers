@@ -1,0 +1,15 @@
+{
+    "AccessToken": "AbCdEfGhIjKlMnOpQrStUvWxYz123456789AbCdEfGhIjKlMnOpQr_StUvWzYz12",    
+    "OrgID": "12a034ff-ab12-1d12-12ab-012c3125abc1",
+    "Name": "mySDDC",
+    "ManagementSubnet": "10.2.0.0/23",
+    "VXLANSubnet": "172.16.0.0/24",    
+    "Region": "us-east-1",
+    "HostType": "i3.metal",
+    "NumHosts": 1,
+    "Provider": "AWS",
+    "ProdURL": "https://vmc.vmware.com",
+    "CSPProdURL": "https://console.cloud.vmware.com",
+    "ConnectedAWSAccountID": "a134c59b-42e7-25ce-ebc4-425449c2ea2a",
+    "ConnectedAWSSubnetID": "subnet-01ab23c4de56f78e"
+}
