@@ -18,7 +18,7 @@ To get started:
 
 1. Use the search bar to filter by the "VMware" prefix.
 
-    Note: All official VMware Cloud on AWS resources begin with `VMware::CloudOnAWS` and specify that they are `Published by AWS Community`.
+    Note: All official VMware Cloud on AWS resources begin with `VMware::CloudonAWS` and specify that they are `Published by AWS Community`.
 
 1. Select the desired resource name to view more information about its schema, and click **Activate**.
 

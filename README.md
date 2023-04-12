@@ -6,7 +6,7 @@ This collection of [AWS CloudFormation resource types][1] allow VMware resources
 
 | Resource                           | Description                                                      | Documentation                          |
 |------------------------------------|------------------------------------------------------------------|----------------------------------------|
-| vmware::cloudonaws::SDDC           | This resource type manages a [VMware Cloud on AWS SDDC][3]       | [/vmware-cloudonaws-sddc][4]           |
+| VMware::CloudonAWS::SDDC           | This resource type manages a [VMware Cloud on AWS SDDC][3]       | [/vmware-cloudonaws-sddc][4]           |
 
 ## Prerequisites
 
