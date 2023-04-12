@@ -1,4 +1,4 @@
-# VMware::CloudOnAWS::SDDC
+# VMware::CloudonAWS::SDDC
 
 This resource type manages a VMware Cloud on AWS [Software Defined Data Centre (SDDC)][1]
 
@@ -82,7 +82,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Creates a VMware Cloud on AWS SDDC
 Resources:
   MySDDC:
-    Type: VMware::CloudOnAWS::SDDC
+    Type: VMware::CloudonAWS::SDDC
     Properties:
         AccessToken: '{{resolve:secretsmanager:MyVMCOrg:SecretString:AccessToken}}'
         OrgID: '{{resolve:secretsmanager:MyVMCOrg:SecretString:OrgID}}'
