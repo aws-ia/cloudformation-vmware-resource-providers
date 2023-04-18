@@ -211,10 +211,16 @@ def read_handler(
                 return _progress_event_failed(
                     handler_error_code=HandlerErrorCode.NotFound,
                     error_message="read_handler: Could not retrieve SDDC"
-                )                
+                )
             else:
-                model.Name = sddc["name"]
-
+                LOG.debug(f"SDDC State: {sddc['sddc_state']}")
+                # SDDCs are never actually deleted, just hidden from the CSP UI. They can be found via API
+                # If the SDDC is found, but in a state of 'DELETED', return the Not Found error code
+                if sddc["sddc_state"] == "DELETED":
+                    return _progress_event_failed(
+                        handler_error_code=HandlerErrorCode.NotFound,
+                        error_message="read_handler: SDDC was found, but in deleted state"
+                    )
         else:
             return _progress_event_failed(
                 handler_error_code=HandlerErrorCode.NotFound,
@@ -395,7 +401,7 @@ def _progress_event_failed(
 ) -> ProgressEvent:
     LOG.debug("_progress_event_failed()")
 
-    return ProgressEvent.failed(HandlerErrorCode.InternalFailure, "SDDC deployment failed")
+    return ProgressEvent.failed(handler_error_code, error_message)
 
 def _callback_helper(
     session: Optional[SessionProxy],
@@ -423,7 +429,8 @@ def _callback_helper(
                 )
 
             if task_complete == "FAILED" or task_complete == "CANCELED":
-                return _progress_event_failed
+                return _progress_event_failed(handler_error_code=HandlerErrorCode.NotFound,
+                    error_message="callback helper: Task status failed or canceled")
 
         return _progress_event_callback(
             model=model
@@ -439,7 +446,8 @@ def _callback_helper(
             )
         
         if task_complete == "FAILED":
-            return _progress_event_failed
+            return _progress_event_failed(handler_error_code=HandlerErrorCode.InternalFailure,
+                    error_message="_callback_helper: Task is a status of failed")
     
         return _progress_event_callback(
             model=model
