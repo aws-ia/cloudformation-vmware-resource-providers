@@ -64,7 +64,6 @@ def create_handler(
         status=OperationStatus.IN_PROGRESS,
         resourceModel=model,
     )
-    # TODO: put code here
 
     if _is_callback(
         callback_context,
@@ -120,14 +119,50 @@ def update_handler(
         status=OperationStatus.IN_PROGRESS,
         resourceModel=model,
     )
-    # TODO: put code here
+    LOG.debug(f"update_handler(), attempting to print model: {model}")
 
-    LOG.debug(f"update_handler(): Model: {model}")
+    LOG.debug(f"Progress status: {progress.status}")
+
+    try:
+        if model and model.ID:
+            authentication = VMCAuth(model.CSPProdURL)
+            authentication.getAccessToken(model.AccessToken)
+            LOG.debug("About to invoke get_sddc_info_json()")
+            sddc = get_sddc_info_json(model.ProdURL,model.OrgID,authentication.access_token,model.ID)
+            if sddc is None:
+                return _progress_event_failed(
+                    handler_error_code=HandlerErrorCode.NotFound,
+                    error_message="update_handler: Could not retrieve SDDC"
+                )
+            else:
+                LOG.debug(f"SDDC State: {sddc['sddc_state']}")
+                # SDDCs are never actually deleted, just hidden from the CSP UI. They can be found via API
+                # If the SDDC is found, but in a state of 'DELETED', return the Not Found error code
+                if sddc["sddc_state"] == "DELETED":
+                    return _progress_event_failed(
+                        handler_error_code=HandlerErrorCode.NotFound,
+                        error_message="update_handler: SDDC was found, but in deleted state"
+                    )
+        else:
+            return _progress_event_failed(
+                handler_error_code=HandlerErrorCode.NotFound,
+                error_message="update_handler: no model ID was found"
+        )
+
+    except Exception as e:
+        LOG.debug(f"Exception {e}")
+        return _progress_event_failed(
+            handler_error_code=HandlerErrorCode.NotFound,
+            error_message=str(e),
+            traceback_content=traceback.format_exc(),
+        )
+
+    # Need to update SDDC here
     
-    return ProgressEvent(
-            status=OperationStatus.SUCCESS,
-            resourceModel=model,
-            )
+    return _progress_event_success(
+        model=model,
+    )
+
 
 
 @resource.handler(Action.DELETE)
