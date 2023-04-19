@@ -1,20 +1,24 @@
 > Note: This module is in alpha state and is likely to contain bugs and updates may introduce breaking changes. It is not recommended for production use at this time.
 
-# VMware::CloudOnAWS::SDDC
+# VMware CloudFormation Resources
 
-This resource type manages a VMware Cloud on AWS [Software Defined Data Centre (SDDC)][1]
+This collection of [AWS CloudFormation resource types][1] allow VMware resources to be controlled using [AWS CloudFormation][2].
+
+| Resource                           | Description                                                      | Documentation                          |
+|------------------------------------|------------------------------------------------------------------|----------------------------------------|
+| VMware::CloudonAWS::SDDC           | This resource type manages a [VMware Cloud on AWS SDDC][3]       | [/vmware-cloudonaws-sddc][4]           |
 
 ## Prerequisites
 
-* [AWS Account][2]
-* [AWS CLI][3]
-* [VMware Cloud Organization][4] and [Access Token][5]
+* [AWS Account][5]
+* [AWS CLI][6]
+* [VMware Cloud Organization][7] and [Access Token][8]
 
 ## AWS Management Console
 
 To get started:
 
-1. Sign in to the [AWS Management Console][6] with your account and navigate to CloudFormation.
+1. Sign in to the [AWS Management Console][9] with your account and navigate to CloudFormation.
 
 1. Select "Public extensions" from the left hand pane and filter Publisher by "Third Party".
 
@@ -30,9 +34,9 @@ To get started:
     * Execution role ARN
     * Automatic updates for minor version releases
 
-1. After activating the extension, you can now [create your AWS stack][7] that includes any of the activated VMware Cloud resources.
+1. After activating the extension, you can now [create your AWS stack][10] that includes any of the activated VMware Cloud resources.
 
-For more information about available commands and workflows, see the official [AWS documentation][8].
+For more information about available commands and workflows, see the official [AWS documentation][11].
 
 ## Supported regions
 
@@ -58,10 +62,6 @@ VMware Cloud on AWS CloudFormation resources are available on the CloudFormation
 | sa-east-1       | South America (São Paulo) |
 
 **Note**: To privately register a resource in any other region, use the provided packages.
-
-## Syntax and Properties Reference
-
-For more details on how to structure a CloudFormation template that makes use of the VMware Cloud on AWS SDDC resource type, and the available properties, click [here][9].
 
 ## Examples
 
@@ -101,12 +101,14 @@ Resources:
         ConnectedAWSSubnetID: subnet-01ab23c4de56f78e
 ```
 
-[1]: https://vmc.techzone.vmware.com/vmc-arch/docs/introduction/vmc-aws-a-technical-overview#sec377-sub5
-[2]: https://aws.amazon.com/account/
-[3]: https://aws.amazon.com/cli/
-[4]: https://docs.vmware.com/en/VMware-Cloud-services/services/Using-VMware-Cloud-Services/GUID-B1E70315-D91E-4618-86C8-3ED7A3AD2E19.html
-[5]: https://docs.vmware.com/en/VMware-Cloud-services/services/Using-VMware-Cloud-Services/GUID-E2A3B1C1-E9AD-4B00-A6B6-88D31FCDDF7C.html
-[6]: https://aws.amazon.com/console/
-[7]: https://console.aws.amazon.com/cloudformation/home
-[8]: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html
-[9]: ./docs/README.md
+[1]: https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/resource-types.html
+[2]: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html
+[3]: https://vmc.techzone.vmware.com/vmc-arch/docs/introduction/vmc-aws-a-technical-overview#sec377-sub5
+[4]: vmware-cloudonaws-sddc
+[5]: https://aws.amazon.com/account/
+[6]: https://aws.amazon.com/cli/
+[7]: https://docs.vmware.com/en/VMware-Cloud-services/services/Using-VMware-Cloud-Services/GUID-B1E70315-D91E-4618-86C8-3ED7A3AD2E19.html
+[8]: https://docs.vmware.com/en/VMware-Cloud-services/services/Using-VMware-Cloud-Services/GUID-E2A3B1C1-E9AD-4B00-A6B6-88D31FCDDF7C.html
+[9]: https://aws.amazon.com/console/
+[10]: https://console.aws.amazon.com/cloudformation/home
+[11]: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html
