@@ -1,0 +1,14 @@
+{
+    "AccessToken": "AbCdEfGhIjKlMnOpQrStUvWxYz123456789AbCdEfGhIjKlMnOpQr_StUvWzYz12",    
+    "OrgID": "12a034ff-ab12-1d12-12ab-012c3125abc1",
+    "Name": "ErrorSDDC",
+    "ManagementSubnet": "10.2.0.0/43",
+    "Region": "us-east-1",
+    "HostType": "i8.metal",
+    "NumHosts": 0,
+    "Provider": "ERR",
+    "ProdURL": "https://vmc.vmware.com",
+    "CSPProdURL": "https://console.cloud.vmware.com",
+    "ConnectedAWSAccountID": "a134c59b-42e7-25ce-ebc4-425449c2ea2a",
+    "ConnectedAWSSubnetID": "subnet-01ab23c4de56f78e"
+}

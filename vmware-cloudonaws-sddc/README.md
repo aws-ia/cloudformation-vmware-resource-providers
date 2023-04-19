@@ -108,3 +108,8 @@ Resources:
 [7]: https://console.aws.amazon.com/cloudformation/home
 [8]: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html
 [9]: ./docs/README.md
+
+If you change `vmware-cloudonaws-sddc.json`, you must rebuild the schema files by running
+```bash
+cfn generate
+```
