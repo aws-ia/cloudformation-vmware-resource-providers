@@ -170,11 +170,23 @@ def update_handler(
             error_message=str(e),
             traceback_content=traceback.format_exc(),
         )
-
-    # Need to update SDDC here
-    #LOG.debug(f'Entire SDDC Object: {json.dumps(sddc, indent=4)}')
     
-    LOG.debug(f'Current SDDC name: {model.Name}, request name: {sddc["name"]}')
+
+    try:
+        success = _update_sddc_helper(authentication=authentication, model=model,request=request,sddc=sddc)
+        print(f'Update sddc helper succeeded? {success}')
+        if not success:
+            return _progress_event_failed(
+                handler_error_code=HandlerErrorCode.InternalFailure,
+                error_message="Failed to update SDDC"
+        )
+
+    except Exception as e:
+        return _progress_event_failed(
+            handler_error_code=HandlerErrorCode.InternalFailure,
+            error_message=str(e),
+            traceback_content=traceback.format_exc(),
+        )
     
     return _progress_event_success(
         model=model,
@@ -454,6 +466,30 @@ def _progress_event_failed(
     LOG.debug("_progress_event_failed()")
 
     return ProgressEvent.failed(handler_error_code, error_message)
+
+def _update_sddc_helper(
+        authentication: VMCAuth,
+        model: ResourceModel,
+        request: ResourceHandlerRequest,
+        sddc: str
+) -> bool:
+    LOG.debug(f"_update_sddc_helper(): Requested name: {model.Name}, SDDC current name: {sddc['name']}")
+
+    myHeader = {"Content-Type": "application/json","Accept": "application/json", 'csp-auth-token': authentication.access_token }
+    myURL = model.ProdURL + "/vmc/api/orgs/" + model.OrgID + "/sddcs/" + sddc["resource_config"]["sddc_id"]
+    LOG.debug(f"API URL: {myURL}")
+
+    payload = {
+        "name": model.Name
+    }
+
+    json_data = json.dumps(payload)
+    response = requests.patch(myURL,headers=myHeader,data=json_data)
+    if response.status_code == 200:
+        return True
+    else:
+        LOG.debug(f"Could not update SDDC. Response status code: {response.status_code}. Response message: {response.text}. Payload: {json_data}")
+        return False
 
 def _callback_helper(
     session: Optional[SessionProxy],
