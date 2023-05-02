@@ -64,7 +64,7 @@ def get_sddcs_json(strProdURL, orgID, sessiontoken):
     myHeader = {"csp-auth-token": sessiontoken}
     myURL = f"{strProdURL}/vmc/api/orgs/{orgID}/sddcs"
     print(myURL)
-    response = requests.get(myURL, headers=myHeader)
+    response = requests.get(myURL, headers=myHeader, timeout=20)
     json_response = response.json()
     print(f"list response {response.status_code}")
     if response.status_code == 200:
@@ -78,7 +78,7 @@ def get_sddc_info_json(strProdURL, orgID, sessiontoken, sddcID):
     myHeader = {"csp-auth-token": sessiontoken}
     myURL = f"{strProdURL}/vmc/api/orgs/{orgID}/sddcs/{sddcID}"
     print(myURL)
-    response = requests.get(myURL, headers=myHeader)
+    response = requests.get(myURL, headers=myHeader, timeout=20)
     print(response.status_code)
     json_response = response.json()
     if response.status_code == 200:

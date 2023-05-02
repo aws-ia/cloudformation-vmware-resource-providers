@@ -72,7 +72,7 @@ def create_sddc_json_v2(
     my_url = f"{strProdURL}/api/inventory/{org_id}/vmc-aws/operations"
     print(f"Endpoint: {my_url}")
     print(json.dumps(call_data, indent=4))
-    resp = requests.post(my_url, json=call_data, headers=myHeader)
+    resp = requests.post(my_url, json=call_data, headers=myHeader, timeout=20)
 
     print(resp.status_code)
 
@@ -119,7 +119,7 @@ def create_sddc_json_v2(
 def get_sddc_deployments_json(strProdURL, authentication: VMCAuth, orgid):
     myHeader = {"csp-auth-token": authentication.access_token}
     myURL = f"{strProdURL}/api/inventory/{orgid}/core/deployments?filter=type.code,in:vmc-aws&sort=creator.timestamp,desc&include_deleted_resources=true"
-    response = requests.get(myURL, headers=myHeader)
+    response = requests.get(myURL, headers=myHeader, timeout=20)
     if response.status_code == 200:
         return response.json()
     else:
@@ -131,7 +131,7 @@ def get_sddc_tasks_json(strProdURL, authentication: VMCAuth, orgid, sddcid, task
     # myURL = f"{strProdURL}/vmc/api/orgs/{orgid}/tasks?$filter=(resource_id eq {sddcid})"
     myURL = f"{strProdURL}/api/operation/{orgid}/core/operations/{task_id}"
     try:
-        response = requests.get(myURL, headers=myHeader)
+        response = requests.get(myURL, headers=myHeader, timeout=20)
     except Exception as e:
         print(f"get_sddc_tasks_json error: {e}")
         return None
@@ -148,7 +148,7 @@ def get_sddc_task_progress_json(
     myHeader = {"csp-auth-token": authentication.access_token}
     myURL = f"{strProdURL}/vmc/api/orgs/{orgid}/tasks/{task_id}"
     try:
-        response = requests.get(myURL, headers=myHeader)
+        response = requests.get(myURL, headers=myHeader, timeout=20)
     except Exception as e:
         print(f"get_sddc_task_progress_json: {e}")
         return None
@@ -293,7 +293,7 @@ def delete_sddc_json(strProdURL, authentication: VMCAuth, orgID, sddcID, force):
         myURL = myURL + "?force=true"
 
     print(f"DELETE URL: {myURL}")
-    response = requests.delete(myURL, headers=myHeader)
+    response = requests.delete(myURL, headers=myHeader, timeout=20)
     json_response = response.json()
     print(response.status_code)
     print(json_response)
@@ -359,7 +359,7 @@ def delete_sddc_json(strProdURL, authentication: VMCAuth, orgID, sddcID, force):
 #     if validate_only:
 #         my_url = my_url + "?validateOnly=true"
 
-#     resp = requests.post(my_url, json=call_data, headers=myHeader)
+#     resp = requests.post(my_url, json=call_data, headers=myHeader,timeout=20)
 
 #     if resp.status_code != 200:
 #         json_response = resp.json()
@@ -398,7 +398,7 @@ def delete_sddc_json(strProdURL, authentication: VMCAuth, orgID, sddcID, force):
 def watch_sddc_task_json(strProdURL, authentication: VMCAuth, orgID, taskid):
     myHeader = {"csp-auth-token": authentication.access_token}
     myURL = f"{strProdURL}/vmc/api/orgs/{orgID}/tasks/{taskid}"
-    response = requests.get(myURL, headers=myHeader)
+    response = requests.get(myURL, headers=myHeader, timeout=20)
     print(f"URL: {myURL}, HEADER: {myHeader}, WATCH response: {response.status_code}")
     try:
         json_response = response.json()

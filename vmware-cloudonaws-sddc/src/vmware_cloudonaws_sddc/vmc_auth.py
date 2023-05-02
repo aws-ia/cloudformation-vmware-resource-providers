@@ -28,6 +28,7 @@ class VMCAuth:
                 f"{self.strCSPProdURL}/csp/gateway/am/api/auth/api-tokens/authorize",
                 params=params,
                 headers=headers,
+                timeout=20,
             )
             jsonResponse = response.json()
             self.access_token = jsonResponse["access_token"]

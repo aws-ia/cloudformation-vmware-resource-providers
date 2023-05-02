@@ -525,7 +525,7 @@ def _update_sddc_helper(
     payload = {"name": model.Name}
 
     json_data = json.dumps(payload)
-    response = requests.patch(myURL, headers=myHeader, data=json_data)
+    response = requests.patch(myURL, headers=myHeader, data=json_data, timeout=20)
     if response.status_code == 200:
         return True
     else:
