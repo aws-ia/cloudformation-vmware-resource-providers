@@ -123,6 +123,20 @@ def update_handler(
 
     LOG.debug(f"Progress status: {progress.status}")
 
+    if _is_callback(
+        callback_context,
+    ):
+        return _callback_helper(
+            session,
+            request,
+            callback_context,
+            model,
+            is_update_handler=True
+        )
+    else:
+        LOG.debug("No callback context present")
+
+    sddc = None
     try:
         if model and model.ID:
             authentication = VMCAuth(model.CSPProdURL)
@@ -158,6 +172,9 @@ def update_handler(
         )
 
     # Need to update SDDC here
+    #LOG.debug(f'Entire SDDC Object: {json.dumps(sddc, indent=4)}')
+    
+    LOG.debug(f'Current SDDC name: {model.Name}, request name: {sddc["name"]}')
     
     return _progress_event_success(
         model=model,
@@ -444,6 +461,7 @@ def _callback_helper(
     callback_context: MutableMapping[str, Any],
     model: Optional[ResourceModel],
     is_delete_handler: bool = False,
+    is_update_handler: bool = False
 ) -> ProgressEvent:
     """Define a callback logic used for resource stabilization."""
     LOG.debug("_callback_helper()")
@@ -471,6 +489,11 @@ def _callback_helper(
             model=model
         )
 
+    elif is_update_handler:
+        LOG.debug('_callback_helper(): UPDATE handler')
+        return _progress_event_success(
+            model=model,
+        )        
     else:
         task_complete = check_task_status_v2(model.ProdURL,authentication,model.OrgID,model.ID,model.TaskID)
         if task_complete == "READY":
