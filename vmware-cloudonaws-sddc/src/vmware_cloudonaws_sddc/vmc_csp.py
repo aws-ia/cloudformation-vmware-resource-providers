@@ -326,75 +326,10 @@ def delete_sddc_json(strProdURL, authentication: VMCAuth, orgID, sddcID, force):
         print(f"Unexpected response: {response.status_code}")
         return None
 
-
-# def create_sddc_json(strProdURL, authentication: VMCAuth ,orgID,name,connectedAccount,region,amount,hostType,subnetId,validate_only, provider="AWS"):
-#     myHeader = {'csp-auth-token': authentication.access_token}
-
-#     #
-#     # docs on data structure
-#     # https://developer.vmware.com/apis/vmc/v1.1/data-structures/SddcConfig/
-#     #
-#     call_data = {
-#         'name': name,
-#         'account_link_sddc_config': [
-#             {
-#                 'customer_subnet_ids': [
-#                     subnetId
-#                 ],
-#                 'connected_account_id': connectedAccount
-#             }
-#         ],
-#         'provider': provider,   # make sure provider is in upper case
-#         'num_hosts': amount,           # 1 host in this case
-#         'host_instance_type' : hostType, #host type from Enumerated options.
-#         'sddc_type': '1NODE' if amount == 1 else 'SingleAZ',  # Multi-AZ for future work
-#         'region': region,                # region where we have permissions to deploy.
-#         'vpc_cidr': '10.3.0.0/23'        # CIDR range for SDDC
-#     }
-#     #
-#     # API Docs: https://developer.vmware.com/apis/vmc/latest/vmc/api/orgs/org/sddcs/post/
-#     #
-#     print(call_data)
-#     my_url = f'{strProdURL}/vmc/api/orgs/{orgID}/sddcs'
-#     if validate_only:
-#         my_url = my_url + "?validateOnly=true"
-
-#     resp = requests.post(my_url, json=call_data, headers=myHeader,timeout=20)
-
-#     if resp.status_code != 200:
-#         json_response = resp.json()
-
-#     if resp.status_code == 202:
-#         print(f"Create SDDC Started. Creation Task is: ")    # pull the task and print it.
-#         newTask = json_response['id']
-#         print(f'{newTask}')
-#         return json_response
-#     elif resp.status_code == 200:
-#         print("Create Task Complete: Input Validated")
-#         validated = "{'input_validated' : True}"
-#         return eval(validated)
-#     elif resp.status_code == 400:
-#         print(f"Error Code {resp.status_code}: Bad Request, Bad URL or Quota Violation")
-#         if 'error_messages' in json_response:
-#             print(json_response['error_messages'][0])
-#         return None
-#     elif resp.status_code == 401:
-#         print(f"Error Code {resp.status_code}: You are unauthorized for this operation. See your administrator")
-#         if 'error_messages' in json_response:
-#             print(json_response['error_messages'])
-#         return None
-#     elif resp.status_code == 403:
-#         print(f"Error Code {resp.status_code}: You are forbidden to use this operation. See your administrator")
-#         if 'error_messages' in json_response:
-#             print(json_response['error_messages'])
-#         return None
-#     else:
-#         print(f'Status code: {resp.status_code}: Unknown error')
-#         if 'error_messages' in json_response:
-#             print(json_response['error_messages'])
-#         return None
-
-
+################################################################################
+### Copyright (C) 2019-2022 VMware, Inc.  All rights reserved.
+### SPDX-License-Identifier: BSD-2-Clause
+################################################################################
 def watch_sddc_task_json(strProdURL, authentication: VMCAuth, orgID, taskid):
     myHeader = {"csp-auth-token": authentication.access_token}
     myURL = f"{strProdURL}/vmc/api/orgs/{orgID}/tasks/{taskid}"
@@ -431,7 +366,10 @@ def watch_sddc_task_json(strProdURL, authentication: VMCAuth, orgID, taskid):
         return None
     return None
 
-
+################################################################################
+### Copyright (C) 2019-2022 VMware, Inc.  All rights reserved.
+### SPDX-License-Identifier: BSD-2-Clause
+################################################################################
 def printTask(event_name: str, task) -> None:
     taskid = task["id"]
     print(f"{event_name} Task Started: {taskid}")
@@ -456,7 +394,10 @@ def printTask(event_name: str, task) -> None:
 
     return
 
-
+################################################################################
+### Copyright (C) 2019-2022 VMware, Inc.  All rights reserved.
+### SPDX-License-Identifier: BSD-2-Clause
+################################################################################
 def watchSDDCTask(**kwargs):
     """watch task and print out status"""
     strProdURL = kwargs["strProdURL"]

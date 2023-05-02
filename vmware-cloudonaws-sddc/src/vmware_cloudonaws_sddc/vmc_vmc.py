@@ -1,3 +1,8 @@
+################################################################################
+### Copyright (C) 2019-2022 VMware, Inc.  All rights reserved.
+### SPDX-License-Identifier: BSD-2-Clause
+################################################################################
+
 import json
 import requests
 
