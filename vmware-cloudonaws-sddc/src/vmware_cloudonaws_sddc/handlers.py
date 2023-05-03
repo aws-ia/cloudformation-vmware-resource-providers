@@ -37,8 +37,8 @@ from .vmc_vmc import *
 # Use this logger to forward log messages to CloudWatch Logs.
 LOG = logging.getLogger(__name__)
 
-# LOG.setLevel(logging.CRITICAL)
-LOG.setLevel(logging.DEBUG)
+LOG.setLevel(logging.WARNING)
+#LOG.setLevel(logging.DEBUG)
 
 TYPE_NAME = "VMware::CloudOnAWS::SDDC"
 
