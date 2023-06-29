@@ -1,0 +1,23 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Resources": {
+        "cfnsddc1": {
+            "Type": "VMware::CloudOnAWS::SDDC",
+            "Properties": {
+                "AccessToken": "{{resolve:secretsmanager:cfn-vmc-secrets:SecretString:AccessToken}}",
+                "OrgID": "{{resolve:secretsmanager:cfn-vmc-secrets:SecretString:OrgID}}",
+                "Name": "cfn-sddc-1-cr",
+                "ManagementSubnet": "10.3.0.0/23",
+                "VXLANSubnet": "172.16.0.0/24",
+                "Region": "us-east-1",
+                "HostType": "i3.metal",
+                "NumHosts": 1,
+                "Provider": "AWS",
+                "ProdURL": "https://vmc.vmware.com",
+                "CSPProdURL": "https://console.cloud.vmware.com",
+                "ConnectedAWSAccountID": "{{resolve:secretsmanager:cfn-vmc-secrets:SecretString:ConnectedAWSAccountID}}",
+                "ConnectedAWSSubnetID": "{{resolve:secretsmanager:cfn-vmc-secrets:SecretString:ConnectedAWSSubnetID}}"
+            }
+        }
+    }
+}
