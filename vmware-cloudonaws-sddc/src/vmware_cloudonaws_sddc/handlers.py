@@ -1,3 +1,7 @@
+"""
+Copyright Amazon.com, Inc. or its affiliates.
+SPDX-License-Identifier: Apache-2.0
+"""
 import logging
 import json
 import argparse
