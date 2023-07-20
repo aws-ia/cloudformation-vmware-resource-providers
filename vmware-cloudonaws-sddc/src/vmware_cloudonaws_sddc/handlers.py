@@ -108,7 +108,7 @@ def create_handler(
             model.ConnectedAWSAccountID,
             model.ConnectedAWSSubnetID,
         )
-        print(json.dumps(json_response, indent=4))
+        # print(json.dumps(json_response, indent=4))
         if json_response is not None:
             sddcId = json_response["resource_id"]
             task_id = json_response["id"]
