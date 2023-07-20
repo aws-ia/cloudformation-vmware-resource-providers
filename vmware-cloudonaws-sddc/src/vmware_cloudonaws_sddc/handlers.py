@@ -49,7 +49,7 @@ TYPE_NAME = "VMware::CloudOnAWS::SDDC"
 resource = Resource(TYPE_NAME, ResourceModel)
 test_entrypoint = resource.test_entrypoint
 
-CALLBACK_DELAY_SECONDS = 5
+CALLBACK_DELAY_SECONDS = 30
 
 # Define a context for the callback logic.  The value for the 'status'
 # key in the dictionary below is consumed in is_callback() and in
@@ -108,7 +108,7 @@ def create_handler(
             model.ConnectedAWSAccountID,
             model.ConnectedAWSSubnetID,
         )
-        print(json.dumps(json_response, indent=4))
+        # print(json.dumps(json_response, indent=4))
         if json_response is not None:
             sddcId = json_response["resource_id"]
             task_id = json_response["id"]

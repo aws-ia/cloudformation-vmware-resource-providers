@@ -28,13 +28,9 @@ Resources:
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
-              - Effect: Allow
+              - Effect: Deny
                 Action:
-                - "VMware:CreateSDDC"
-                - "VMware:DeleteSDDC"
-                - "VMware:DescribeSDDC"
-                - "VMware:ListSDDCs"
-                - "VMware:UpdateSDDC"
+                - "*"
                 Resource: "*"
 Outputs:
   ExecutionRoleArn:
